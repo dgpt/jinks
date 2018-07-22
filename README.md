@@ -1,24 +1,11 @@
-# README
+# JINKS
+A Jira Link Manager - now YOU can view and update linked dependency trees for Jira!
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Setup
+* Get Jira oauth credentials, add them to .env.local (use .env as a guideline)
+$ bundle install
+$ rake neo4j:install[enterprise-latest]
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Start
+$ rake neo4j:start
+$ rails s
