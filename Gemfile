@@ -10,14 +10,17 @@ gem 'puma', '~> 3.11'
 
 gem 'neo4j', '~> 9.2.0'
 
+gem 'dotenv-rails', '~> 2.5.0'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'rack-cors', '~> 1.0.2'
+
 gem 'oauth',        '~> 0.5.4'
-gem 'dotenv-rails', '~> 2.5.0'
 gem 'pry',          '~> 0.11.3'
 gem 'pry-rails',    '~> 0.3.6'
 gem 'jira-ruby',    '~> 1.5.0'

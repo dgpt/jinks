@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Default Starter',
+    title: 'Jinks = Jira + Links'
   },
   plugins: ['gatsby-plugin-react-helmet'],
 }

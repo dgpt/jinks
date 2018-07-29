@@ -1,13 +1,34 @@
-import React from 'react'
-import Link from 'gatsby-link'
+import React from 'react';
+import * as d3 from 'd3';
+//import issueFetchable from '../requests/issueFetchable';
+import fetchable from '../requests/fetchable';
+import sigma from 'sigma';
+import Graph from '../components/graph';
+import {Sigma, SigmaEnableWebGL, RandomizeNodePositions, RelativeSize} from 'react-sigma';
 
-const IndexPage = () => (
-  <div>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to="/page-2/">Go to page 2</Link>
-  </div>
-)
+class IndexPage extends React.PureComponent {
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.fetchData()}>
+          Load Epic
+        </button>
+        {this.props.children}
+        {this.props.data && (
+          <Sigma graph={this.props.data} settings={{drawEdges: true, clone: false}}>
+            <RelativeSize initialSize={15}/>
+            <RandomizeNodePositions/>
+          </Sigma>
+        )}
+      </div>
+    );
+  }
 
-export default IndexPage
+  fetchData() {
+    return this.props.fetch(
+      { epic: 'BR-18152', type: 'dependent' }
+    );
+  }
+}
+
+export default fetchable(IndexPage, { path: 'issues' });

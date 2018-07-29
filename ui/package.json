@@ -4,11 +4,15 @@
   "version": "1.0.0",
   "author": "Spencer Miller <smiller@instructure.com>",
   "dependencies": {
+    "cytoscape": "^3.2.15",
     "d3": "^5.5.0",
     "gatsby": "^1.9.277",
     "gatsby-link": "^1.6.46",
     "gatsby-plugin-react-helmet": "^2.0.11",
-    "react-helmet": "^5.2.0"
+    "gatsby-source-thirdparty": "^1.0.6",
+    "react-helmet": "^5.2.0",
+    "react-sigma": "^1.2.30",
+    "sigma": "^1.2.1"
   },
   "keywords": [
     "gatsby"
