@@ -62,14 +62,6 @@ class Issue
         .match("(issue)-[r:#{type}]-(other)")
         .pluck("DISTINCT r")
     end
-
-    def link_map(type)
-      return nil unless type
-      all.query_as(:issue)
-        .match("(issue)-[#{type}]-(other)")
-        .with("{ from: issue.key, to: other.key } AS links")
-        .pluck("links")
-    end
   end
 
   def create_links_from_json!(json = {})

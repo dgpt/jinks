@@ -9,8 +9,6 @@ class IssuesController < ApplicationController
   #   epic - String; Jira Key
   def index
     @issues = filter_by_epic(Issue.all(:issue))
-    #@link_map = @issues.link_map type
-    #@issues = @issues.linked(type)
     @nodes = @issues.linked_nodes(type)
     @edges = @issues.linked_rels(type)
     render :index, formats: :json
