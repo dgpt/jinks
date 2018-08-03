@@ -1,34 +1,38 @@
 import React from 'react';
-import * as d3 from 'd3';
-//import issueFetchable from '../requests/issueFetchable';
-import fetchable from '../requests/fetchable';
-import sigma from 'sigma';
+import issueFetchable from '../requests/issueFetchable';
 import Graph from '../components/graph';
-import {Sigma, SigmaEnableWebGL, RandomizeNodePositions, RelativeSize} from 'react-sigma';
+import { Flex, FlexItem } from '@instructure/ui-layout';
+import { Button } from '@instructure/ui-buttons';
+import { TextInput } from '@instructure/ui-forms';
 
-class IndexPage extends React.PureComponent {
+class IndexPage extends React.Component {
   render() {
+    const { data } = this.props;
     return (
-      <div>
-        <button onClick={() => this.fetchData()}>
-          Load Epic
-        </button>
-        {this.props.children}
-        {this.props.data && (
-          <Sigma graph={this.props.data} settings={{drawEdges: true, clone: false}}>
-            <RelativeSize initialSize={15}/>
-            <RandomizeNodePositions/>
-          </Sigma>
-        )}
-      </div>
+      <Flex direction="column" justifyItems="start" height="100%">
+        <FlexItem>
+          <Flex
+            justifyItems="space-between"
+            padding="large xx-small large xx-small"
+          >
+            <FlexItem shrink grow>
+              <TextInput label="" />
+            </FlexItem>
+            <FlexItem padding="none none none large">
+              <Button onClick={() => this.fetchData()}>Load Epic</Button>
+            </FlexItem>
+          </Flex>
+        </FlexItem>
+        <FlexItem height="100%" shrink grow>
+          {data && <Graph elements={data} />}
+        </FlexItem>
+      </Flex>
     );
   }
 
-  fetchData() {
-    return this.props.fetch(
-      { epic: 'BR-18152', type: 'dependent' }
-    );
-  }
+  fetchData = () => {
+    return this.props.fetch({ epic: 'BR-18152', type: 'dependent' });
+  };
 }
 
-export default fetchable(IndexPage, { path: 'issues' });
+export default issueFetchable(IndexPage);
