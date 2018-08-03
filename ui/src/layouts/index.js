@@ -4,29 +4,35 @@ import Helmet from 'react-helmet';
 
 import Header from '../components/header';
 import './index.css';
+import theme from '@instructure/ui-themes/lib/canvas';
 
-const Layout = ({ children, data }) => (
-  <div>
-    <Helmet
-      title={data.site.siteMetadata.title}
-      meta={[
-        { name: 'description', content: 'Sample' },
-        { name: 'keywords', content: 'sample, something' },
-      ]}
-    />
-    <Header siteTitle={data.site.siteMetadata.title} />
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '0px 1.0875rem 1.45rem',
-        paddingTop: 0,
-      }}
-    >
-      {children()}
+const Layout = ({ children, data }) => {
+  theme.use();
+  return (
+    <div style={{ height: '100vh' }}>
+      <Helmet
+        title={data.site.siteMetadata.title}
+        meta={[
+          { name: 'description', content: 'Sample' },
+          { name: 'keywords', content: 'sample, something' },
+        ]}
+      />
+      <Header siteTitle={data.site.siteMetadata.title} />
+      <div
+        style={{
+          margin: '0 auto',
+          maxWidth: 960,
+          padding: '0px 1.45rem',
+          paddingTop: 0,
+          nBottom: '1rem',
+          height: '85%',
+        }}
+      >
+        {children()}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.func,
