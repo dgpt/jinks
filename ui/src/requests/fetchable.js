@@ -5,6 +5,7 @@ const DEFAULT_OPTIONS = {
   props: [],
   path: '',
   method: 'GET',
+  parse: data => data,
 };
 
 export default function fetchable(Component, options) {
@@ -30,19 +31,12 @@ export default function fetchable(Component, options) {
       this.state = {
         isLoading: false,
         error: null,
-        data: [],
+        data: null,
       };
     }
 
     render() {
       const { data, isLoading, error } = this.state;
-      /*
-      const { props } = options;
-      const fetchedProps = props.reduce((obj, prop) => {
-        obj[prop] = data[prop];
-        return obj;
-      }, {});
-      */
 
       return (
         <Component
@@ -50,22 +44,8 @@ export default function fetchable(Component, options) {
           fetch={this.fetch.bind(this)}
           isLoading={isLoading}
           error={error}
-        >
-          {this.renderStatus()}
-        </Component>
+        />
       );
-    }
-
-    renderStatus() {
-      const { error, isLoading } = this.state;
-
-      if (error) {
-        return <div>Error: {error.message}</div>;
-      } else if (isLoading) {
-        return <div>Loading...</div>;
-      }
-
-      return null;
     }
 
     fetch(extQuery) {
@@ -77,7 +57,8 @@ export default function fetchable(Component, options) {
       return fetch(url, { method, body })
         .then(res => res.json())
         .then(
-          data => this.setState({ isLoading: false, data }),
+          data =>
+            this.setState({ isLoading: false, data: options.parse(data) }),
           error => this.setState({ isLoading: false, error })
         );
     }
