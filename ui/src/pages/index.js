@@ -31,7 +31,7 @@ class IndexPage extends React.Component {
   }
 
   fetchData = () => {
-    return this.props.fetch({ epic: 'BR-18152', type: 'dependent' });
+    return this.props.fetch({ epic: 'BR-23116', type: 'dependent' });
   };
 }
 

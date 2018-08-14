@@ -6,7 +6,7 @@ json.nodes @nodes do |node|
 end
 
 json.edges @edges do |edge|
-  json.source "n#{edge.start_node_id}"
-  json.target "n#{edge.end_node_id}"
+  json.source "n#{edge.end_node_id}"
+  json.target "n#{edge.start_node_id}"
   json.id "e#{edge.id}"
 end
