@@ -9,3 +9,7 @@ $ rake neo4j:install[enterprise-latest]
 # Start
 $ rake neo4j:start
 $ rails s
+
+# Development
+Neo4j browser
+  localhost:7474/browser/

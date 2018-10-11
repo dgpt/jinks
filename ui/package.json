@@ -13,11 +13,14 @@
     "cytoscape": "^3.2.15",
     "cytoscape-dagre": "^2.2.1",
     "cytoscape-edgehandles": "^3.4.0",
+    "cytoscape-node-html-label": "^1.1.0",
+    "cytoscape-popper": "^1.0.2",
     "gatsby": "^1.9.277",
     "gatsby-link": "^1.6.46",
     "gatsby-plugin-react-helmet": "^2.0.11",
     "lodash": "^3.10.1",
-    "react-helmet": "^5.2.0"
+    "react-helmet": "^5.2.0",
+    "tippy.js": "^3.0.4"
   },
   "keywords": [
     "gatsby"
