@@ -1,6 +1,6 @@
 import React from 'react';
 import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
+import klay from 'cytoscape-klay';
 import edgehandles from 'cytoscape-edgehandles';
 import popper from 'cytoscape-popper';
 import tippy from 'tippy.js';
@@ -10,7 +10,7 @@ import { isEqual, debounce } from 'lodash';
 const cyStyle = {
   height: '100%',
   width: '100%',
-  backgroundColor: '#FFF',
+  background: 'transparent',
   overflow: 'hidden',
 };
 
@@ -67,7 +67,18 @@ const graphStyle = [
   },
 ];
 
-cytoscape.use(dagre);
+const layoutSettings = {
+  name: 'klay',
+  nodeDimensionsIncludeLabels: true,
+  animate: true,
+  animationEasing: 'ease-in-out-expo',
+  animationDuration: 1000,
+  klay: {
+    direction: 'DOWN',
+  }
+};
+
+cytoscape.use(klay);
 cytoscape.use(edgehandles);
 cytoscape.use(popper);
 
@@ -75,6 +86,7 @@ export default class Cyto extends React.Component {
   cy = null;
   layout = null;
   edgehandles = null;
+  tooltipsHidden = true;
 
   static defaultProps = {
     onNewEdge: Function.prototype,
@@ -94,29 +106,19 @@ export default class Cyto extends React.Component {
 
     this.edgehandles = this.cy.edgehandles({
       edgeType: this.handleEdgeType,
-      snap: true,
+      snap: false,
       preview: false,
     });
 
     this.edgehandles.enableDrawMode();
-
-    this.layout = this.cy.layout({
-      name: 'dagre',
-      rankDir: 'TB',
-      ranker: 'longest-path',
-      spacingFactor: 0.9,
-      nodeDimensionsIncludeLabels: true,
-      animate: true,
-      animationEasing: 'ease-in-out-expo',
-      animationDuration: 1000,
-    });
 
     this.cy.on('ehcomplete', this.handleNewEdge);
     this.cy.on('select', 'node', this.onSelectNode.bind(this));
     this.cy.on('unselect', 'node', this.onUnselectNode.bind(this));
     this.cy.on('mouseover', 'node', this.onMouseOver.bind(this));
     this.cy.on('mouseout', 'node', this.onMouseOut.bind(this));
-    this.layout.run();
+
+    this.cy.layout(layoutSettings).run();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -155,16 +157,18 @@ export default class Cyto extends React.Component {
   onMouseOver = (event) => {
     const node = event.target;
     tippy.hideAllPoppers();
+    this.tooltipsHidden = false;
     this.showTooltip(node);
   }
 
   onMouseOut = () => {
     tippy.hideAllPoppers();
+    this.tooltipsHidden = true;
   }
 
   handleNewEdge = (sourceNode, targetNode) => {
-    const { onNewEdge } = this.props;
-    onNewEdge && onNewEdge(sourceNode, targetNode);
+    this.props.onNewEdge(sourceNode, targetNode);
+    this.cy.layout(layoutSettings).run();
   }
 
   handleEdgeType = (sourceNode, targetNode) => {
@@ -176,12 +180,14 @@ export default class Cyto extends React.Component {
   }
 
   showTooltip = debounce((node) => {
-    const data = node.data();
-    tippy.one(node.popperRef(), {
-      content: data.summary,
-      showOnInit: true,
-      arrow: true,
-      inertia: true,
-    });
-  }, 300);
+    if (!this.tooltipsHidden) {
+      const data = node.data();
+      tippy.one(node.popperRef(), {
+        content: data.summary,
+        showOnInit: true,
+        arrow: true,
+        inertia: true,
+      });
+    }
+  }, 600);
 }
