@@ -1,28 +1,37 @@
 require 'jira'
 
 class IssueService
-  def initialize
+  def initialize(force_update: true)
     @client = Jira.new.client
+    @force_update = force_update
+    @jql = []
   end
 
-  def load_epic(key)
-    load_jql "\"Epic Link\" = #{key}"
+  def set_epic(key)
+    @jql << "\"Epic Link\" = #{key}"
   end
 
-  def load_issues(keys)
-    load_jql "key in (#{Array(keys).join(", ")})"
+  def set_issues(keys)
+    @jql << "key in (#{Array(keys).join(", ")})"
   end
 
-  def load_sprint(sprint)
+  def set_sprint(sprint)
     #TODO
   end
 
-  def load_jql(jql)
+  def load
+    jql = @jql.join(" AND ")
+    cache_key = "jql:#{jql}"
+    return unless @force_update || Rails.cache.read(cache_key).nil?
+    return if @jql.empty?
+
     issues = @client.Issue.jql(
       jql,
       fields: Issue::JIRA_FIELDS,
       max_results: 300
     )
+
+    Rails.cache.write(cache_key, true, expires_in: 5.minutes)
 
     issues.each do |issue|
       Issue.update_or_create_from_json!(issue.attrs).tap do |i|

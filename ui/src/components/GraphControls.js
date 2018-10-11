@@ -21,15 +21,25 @@ class GraphControls extends Component {
         padding="large xx-small large xx-small"
       >
         <FlexItem shrink grow>
-          <TextInput label="" />
+          <TextInput label="" inputRef={input => (this.input = input)}/>
         </FlexItem>
         <FlexItem padding="none none none large">
-          <Button onClick={() => this.props.onSubmit()}>
+          <Button onClick={this.submitEpic}>
             Load Epic
           </Button>
         </FlexItem>
       </Flex>
     );
+  }
+
+  submitEpic = () => {
+    if (!this.input && !this.input.value) {
+      return;
+    }
+
+    this.props.onSubmit({
+      epic: this.input.value
+    });
   }
 }
 

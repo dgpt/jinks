@@ -9,9 +9,19 @@ class IssuesController < ApplicationController
   #   epic - String; Jira Key
   def index
     @issues = filter_by_epic(Issue.all(:issue))
-    @nodes = @issues.linked_nodes(type)
-    @edges = @issues.linked_rels(type)
+    @rels = @issues.linked_rels(type)
+
+    issue_service.load
     render :index, formats: :json
+  end
+
+  # PUT /issues
+  #
+  # Updates issues from Jira
+  # Limited to 300 issues at a time
+  #
+  # Request Parameters
+  def update
   end
 
   # POST /issues
@@ -26,19 +36,20 @@ class IssuesController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_issue
-    @issue = Issue.find(params[:id])
+  def issue_service
+    IssueService.new(force_update: params[:force])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def issue_params
     params.fetch(:issue, {})
   end
 
   def filter_by_epic(scope)
     epic = params[:epic]
-    !!epic ? scope.where(epic: epic) : scope
+    if epic
+      issue_service.set_epic(epic)
+      scope.where(epic: epic)
+    end
   end
 
   def type

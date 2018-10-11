@@ -76,8 +76,8 @@ class Issue
 
     # TODO: this could be more performant
     send(scopes["inward"]) << (
-      Issue.update_or_create_from_json!(inward)) if inward
+      Issue.update_or_create_from_json!(inward)) if inward && scopes["inward"]
     send(scopes["outward"]) << (
-      Issue.update_or_create_from_json!(outward)) if outward
+      Issue.update_or_create_from_json!(outward)) if outward && scopes["outward"]
   end
 end
