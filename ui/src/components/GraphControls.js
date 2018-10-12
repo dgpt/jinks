@@ -3,6 +3,7 @@ import { Flex, FlexItem } from '@instructure/ui-layout'
 import TextInput from '@instructure/ui-forms/lib/components/TextInput'
 import Button from '@instructure/ui-buttons/lib/components/Button'
 import PropTypes from 'prop-types';
+import { colors } from '../shared/constants';
 
 class GraphControls extends Component {
   static propTypes = {
@@ -21,10 +22,25 @@ class GraphControls extends Component {
         padding="large xx-small large xx-small"
       >
         <FlexItem shrink grow>
-          <TextInput label="" inputRef={input => (this.input = input)}/>
+          <TextInput
+            label=""
+            theme={{
+              background: colors.background,
+              borderColor: colors.text,
+              color: colors.text,
+            }}
+            inputRef={input => (this.input = input)}
+          />
         </FlexItem>
         <FlexItem padding="none none none large">
-          <Button onClick={this.submitEpic}>
+          <Button
+            variant="primary"
+            theme={{
+              primaryBackground: colors.primary,
+              primaryBorderColor: colors.primary,
+              primaryColor: colors.text,
+            }}
+            onClick={this.submitEpic}>
             Load Epic
           </Button>
         </FlexItem>

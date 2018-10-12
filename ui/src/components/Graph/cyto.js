@@ -6,6 +6,7 @@ import popper from 'cytoscape-popper';
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import { isEqual, debounce } from 'lodash';
+import { colors } from '../../shared/constants';
 
 const cyStyle = {
   height: '100%',
@@ -29,9 +30,9 @@ const graphStyle = [
       shape: 'roundrectangle',
       width: '100px',
       height: '50px',
-      color: '#FFF',
+      color: colors.text,
       'font-weight': 'bold',
-      'background-color': '#484850',
+      'background-color': colors.foreground,
       'text-valign': 'center',
       'overlay-padding': '2px',
       'z-index': 100,
@@ -39,9 +40,39 @@ const graphStyle = [
   },
 
   {
-    selector: 'node:selected',
+    selector: ':selected',
     style: {
-      'background-color': '#38F',
+      'border-color': colors.text,
+      'border-width': '2px',
+      'border-style': 'solid'
+    },
+  },
+
+  {
+    selector: 'node[status = "Open"]',
+    style: {
+      'background-color': colors.issue.open,
+    },
+  },
+
+  {
+    selector: 'node[status = "In Progress"]',
+    style: {
+      'background-color': colors.issue.inProgress,
+    },
+  },
+
+  {
+    selector: 'node[status *= "QA"]',
+    style: {
+      'background-color': colors.issue.qa,
+    },
+  },
+
+  {
+    selector: 'node[status = "Closed"]',
+    style: {
+      'background-color': colors.issue.closed,
     },
   },
 
@@ -49,8 +80,8 @@ const graphStyle = [
     selector: 'edge',
     style: {
       width: 3,
-      'line-color': '#BBB',
-      'target-arrow-color': '#BBB',
+      'line-color': colors.text,
+      'target-arrow-color': colors.text,
       'target-arrow-shape': 'triangle',
       'target-arrow-fill': 'filled',
       'arrow-scale': 1,
@@ -71,10 +102,12 @@ const layoutSettings = {
   name: 'klay',
   nodeDimensionsIncludeLabels: true,
   animate: true,
-  animationEasing: 'ease-in-out-expo',
-  animationDuration: 1000,
+  animationEasing: 'ease-in-out',
+  animationDuration: 900,
   klay: {
     direction: 'DOWN',
+    fixedAlignment: 'BALANCED',
+    nodePlacement: 'LINEAR_SEGMENTS',
   }
 };
 
@@ -99,14 +132,15 @@ export default class Cyto extends React.Component {
       container: this.container,
       style: graphStyle,
       elements: this.props.elements,
-      minZoom: 0.4,
+      minZoom: 0.3,
       maxZoom: 2,
       wheelSensitivity: 0.1,
     });
 
     this.edgehandles = this.cy.edgehandles({
       edgeType: this.handleEdgeType,
-      snap: false,
+      snap: true,
+      snapThreshold: 8,
       preview: false,
     });
 
@@ -168,7 +202,9 @@ export default class Cyto extends React.Component {
 
   handleNewEdge = (sourceNode, targetNode) => {
     this.props.onNewEdge(sourceNode, targetNode);
-    this.cy.layout(layoutSettings).run();
+    setTimeout(() => (
+      this.cy.layout(layoutSettings).run()
+    ), 50);
   }
 
   handleEdgeType = (sourceNode, targetNode) => {

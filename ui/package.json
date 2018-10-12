@@ -8,7 +8,7 @@
     "@instructure/ui-forms": "^5.22.0",
     "@instructure/ui-layout": "^5.22.0",
     "@instructure/ui-overlays": "^5.23.0",
-    "@instructure/ui-themeable": "^5.22.0",
+    "@instructure/ui-themeable": "^5.30.0",
     "@instructure/ui-themes": "^5.22.0",
     "cytoscape": "^3.2.15",
     "cytoscape-edgehandles": "^3.4.0",

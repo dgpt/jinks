@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-
 import Header from '../components/Header';
 import './index.css';
 import theme from '@instructure/ui-themes/lib/canvas';
+theme.use();
 
 const Layout = ({ children, data }) => {
-  theme.use();
   return (
     <div style={{ height: '100vh' }}>
       <Helmet
