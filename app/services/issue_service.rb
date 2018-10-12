@@ -1,18 +1,57 @@
 require 'jira'
 
 class IssueService
+  attr_reader :jql
+
   def initialize(force_update: true)
     @client = Jira.new.client
     @force_update = force_update
+    reset # sets initial instance variables
+  end
+
+  def reset
     @jql = []
+    @to_sync = {
+      epics: [],
+      issues: [],
+    }
   end
 
-  def set_epic(key)
+  def jql
+    @jql.join(" ")
+  end
+
+  def and
+    @jql << "AND"
+    if block_given?
+      group { yield }
+    end
+    self
+  end
+
+  def or
+    @jql << "OR"
+    if block_given?
+      group { yield }
+    end
+    self
+  end
+
+  def group(&block)
+    @jql << "("
+    block.call
+    @jql << ")"
+    self
+  end
+
+  def epic(key)
     @jql << "\"Epic Link\" = #{key}"
+    self
   end
 
-  def set_issues(keys)
+  def issues(keys)
     @jql << "key in (#{Array(keys).join(", ")})"
+    self
   end
 
   def set_sprint(sprint)
@@ -20,7 +59,6 @@ class IssueService
   end
 
   def load
-    jql = @jql.join(" AND ")
     cache_key = "jql:#{jql}"
     return unless @force_update || Rails.cache.read(cache_key).nil?
     return if @jql.empty?

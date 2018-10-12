@@ -47,7 +47,7 @@ class IssuesController < ApplicationController
   def filter_by_epic(scope)
     epic = params[:epic]
     if epic
-      issue_service.set_epic(epic)
+      issue_service.epic(epic)
       scope.where(epic: epic)
     end
   end
