@@ -11,10 +11,7 @@ class IssueService
 
   def reset
     @jql = []
-    @to_sync = {
-      epics: [],
-      issues: [],
-    }
+    @to_sync = {}
   end
 
   def jql
@@ -60,8 +57,10 @@ class IssueService
 
   def load
     cache_key = "jql:#{jql}"
+    Rails.logger.debug("Attempting to load jql: #{jql}")
     return unless @force_update || Rails.cache.read(cache_key).nil?
     return if @jql.empty?
+    Rails.logger.debug("Loading jql: #{jql}")
 
     issues = @client.Issue.jql(
       jql,
@@ -71,12 +70,17 @@ class IssueService
 
     Rails.cache.write(cache_key, true, expires_in: 5.minutes)
 
-    issues.each do |issue|
+    Rails.logger.debug("Creating query")
+    query = Query.find_or_initialize_by(jql: jql)
+
+    query.issues = issues.map do |issue|
       Issue.update_or_create_from_json!(issue.attrs).tap do |i|
         issue.issuelinks.each do |link|
           i.create_links_from_json!(link.attrs)
         end
       end
     end
+
+    query.save!
   end
 end

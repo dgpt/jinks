@@ -8,10 +8,11 @@ class IssuesController < ApplicationController
   #   type - String; "dependent", "caused"
   #   epic - String; Jira Key
   def index
-    @issues = filter_by_epic(Issue.all(:issue))
+    set_epic(params[:epic])
+    issue_service.load
+    @issues = current_query.issues
     @rels = @issues.linked_rels(type)
 
-    issue_service.load
     render :index, formats: :json
   end
 
@@ -37,18 +38,20 @@ class IssuesController < ApplicationController
 
   private
   def issue_service
-    IssueService.new(force_update: params[:force])
+    @issue_service ||= IssueService.new(force_update: params[:force])
+  end
+
+  def current_query
+    Query.where(jql: issue_service.jql)
   end
 
   def issue_params
     params.fetch(:issue, {})
   end
 
-  def filter_by_epic(scope)
-    epic = params[:epic]
+  def set_epic(epic)
     if epic
       issue_service.epic(epic)
-      scope.where(epic: epic)
     end
   end
 

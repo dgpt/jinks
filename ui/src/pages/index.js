@@ -7,7 +7,6 @@ import {
   Flex, FlexItem,
   DrawerLayout, DrawerContent, DrawerTray
 } from '@instructure/ui-layout';
-import './index.css';
 
 class IndexPage extends React.Component {
   constructor(props) {
