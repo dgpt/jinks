@@ -4,13 +4,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.3'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.0'
 
-gem 'neo4j', '~> 9.2.0'
+gem 'neo4j', '~> 9.5.0'
 
-gem 'dotenv-rails', '~> 2.5.0'
+gem 'dotenv-rails', '~> 2.7.4'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
@@ -21,9 +21,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'rack-cors', '~> 1.0.2'
 
 gem 'oauth',        '~> 0.5.4'
-gem 'pry',          '~> 0.11.3'
+gem 'pry',          '~> 0.12.2'
 gem 'pry-rails',    '~> 0.3.6'
-gem 'jira-ruby',    '~> 1.5.0'
+gem 'jira-ruby',    '~> 1.7.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -32,7 +32,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 3.7.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
