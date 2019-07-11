@@ -11,7 +11,7 @@ class IssuesController < ApplicationController
     set_epic(params[:epic])
     issue_service.load
     @issues = current_query.issues
-    @rels = @issues.linked_rels(type)
+    @rels = current_query.linked_rels(type)
 
     render :index, formats: :json
   end
@@ -42,7 +42,7 @@ class IssuesController < ApplicationController
   end
 
   def current_query
-    Query.where(jql: issue_service.jql)
+    @current_query ||= Query.find_by(jql: issue_service.jql)
   end
 
   def issue_params

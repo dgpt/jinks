@@ -2,5 +2,4 @@
 
 # TODO: add a compatibility check using `command -v tmux`f
 
-rake neo4j:start
-tmux new -s jinks 'rails s' \; split-window -h 'cd ui && gatsby develop'
+rake neo4j:start && tmux new -s jinks 'rails s' \; split-window -h 'cd ui && gatsby develop'
