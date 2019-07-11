@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, TextArea } from '@instructure/ui-forms';
 import { View } from '@instructure/ui-layout'
+import { colors } from 'shared/constants';
 
 class IssueForm extends PureComponent {
   static propTypes = {
@@ -21,8 +22,15 @@ class IssueForm extends PureComponent {
         as="div"
         padding="small"
       >
-        <h2>{issue.summary}</h2>
-        <TextArea value={issue.description}></TextArea>
+        <h2>{issue.label}</h2>
+        <label>
+          Summary
+          <p className="summary">{issue.summary}</p>
+        </label>
+        <label>
+          Description
+          <p className="description">{issue.description}</p>
+        </label>
       </View>
     );
   }

@@ -6,12 +6,13 @@ const DEFAULT_OPTIONS = {
   path: '',
   method: 'GET',
   parse: data => data,
+  setData: false
 };
 
-export default function fetchable(Component, options) {
+export default function fetchable(Component, globalOptions) {
   const apiUrl = process.env.API_URL;
 
-  options = { ...DEFAULT_OPTIONS, ...options };
+  globalOptions = { ...DEFAULT_OPTIONS, ...globalOptions };
 
   if (!apiUrl) {
     throw new Error('FetchError: API_URL not defined in environment!');
@@ -19,7 +20,8 @@ export default function fetchable(Component, options) {
 
   function buildURL(path, query) {
     const parsedQuery = querystring.stringify(query);
-    const url = new URL(`${path}?${parsedQuery}`, apiUrl);
+    const fullQuery = parsedQuery ? `?${parsedQuery}` : ''
+    const url = new URL(path + fullQuery, apiUrl);
     return url.toString();
   }
 
@@ -41,24 +43,38 @@ export default function fetchable(Component, options) {
       return (
         <Component
           data={data}
-          fetch={this.fetch.bind(this)}
+          fetch={this.fetch}
+          setData={this.setData}
           isLoading={isLoading}
           error={error}
         />
       );
     }
 
-    fetch(extQuery) {
-      const { method, body, path, query } = options;
-      const url = buildURL(path, { ...query, ...extQuery });
+    setData = (data) => {
+      this.setState({ data });
+    }
 
+    fetch = (options) => {
       this.setState({ isLoading: true });
 
-      return fetch(url, { method, body })
+      options = { ...globalOptions, ...options };
+      const {
+        method, body, path,
+        query, setData, parse
+      } = options;
+
+      const url = buildURL(path, query);
+      return fetch(url, { method, body: JSON.stringify(body) })
         .then(res => res.json())
         .then(
-          data =>
-            this.setState({ isLoading: false, data: options.parse(data) }),
+          data => {
+            let state = { isLoading: false };
+            if (setData && parse) {
+              state.data = parse(data);
+            }
+            return this.setState(state);
+          },
           error => this.setState({ isLoading: false, error })
         );
     }

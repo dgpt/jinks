@@ -1,45 +1,58 @@
 import React from 'react';
-import issueFetchable from '../requests/issueFetchable';
-import Graph from '../components/Graph';
-import GraphControls from '../components/GraphControls';
-import IssueTray from '../components/IssueTray';
-import {
-  Flex, FlexItem,
-  DrawerLayout, DrawerContent, DrawerTray
-} from '@instructure/ui-layout';
+import issueFetchable from 'requests/issueFetchable';
+import Graph from 'components/Graph';
+import GraphControls from 'components/GraphControls';
+import Actions from 'components/Actions';
+import IssueTray from 'components/IssueTray';
+import Layout from 'components/Layout';
+import { DrawerLayout, DrawerContent, DrawerTray } from '@instructure/ui-layout';
+import './index.css'
 
 class IndexPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       trayOpen: false,
-      selectedIssue: {}
+      selectedIssue: {},
+      selectedEdge: null
     };
   }
 
   render() {
-    const { data } = this.props;
+    const { data, fetchIssues } = this.props;
+
     return (
-      <Flex direction="column" justifyItems="start" height="100%">
-        <FlexItem>
-          <GraphControls onSubmit={this.fetchData} />
-        </FlexItem>
-        <FlexItem height="100%" width="100%" shrink grow>
-          {data && (
-            <Graph
-              elements={data}
-              onSelectNode={this.openTray}
-              onUnselectNode={this.closeTray}
+      <Layout>
+        <main>
+          <section className="controls">
+            <GraphControls onSubmit={fetchIssues} />
+          </section>
+          <section className="graph">
+            {data && (
+              <Graph
+                elements={data}
+                onSelectNode={this.openTray}
+                onUnselectNode={this.closeTray}
+                onSelectEdge={this.selectedEdge}
+                onUnselectEdge={this.unselectEdge}
+                onNewEdge={this.createLink}
+              />
+            )}
+            <IssueTray
+              isOpen={this.state.trayOpen}
+              close={this.closeTray}
+              issue={this.state.selectedIssue}
+              submit={()=>{}/*this.updateIssue*/}
             />
-          )}
-          <IssueTray
-            isOpen={this.state.trayOpen}
-            close={this.closeTray}
-            issue={this.state.selectedIssue}
-            submit={this.updateIssue}
-          />
-        </FlexItem>
-      </Flex>
+          </section>
+          <section className="actions">
+            <Actions
+              selectedEdge={this.state.selectedEdge}
+              onDeleteEdge={this.deleteSelectedEdge}
+            />
+          </section>
+        </main>
+      </Layout>
     );
   }
 
@@ -56,12 +69,28 @@ class IndexPage extends React.Component {
     });
   }
 
-  updateIssue = (data) => {
-    console.log('submitting', data);
+  selectedEdge = (edge) => {
+    this.setState({
+      selectedEdge: edge
+    });
   }
 
-  fetchData = ({ epic }) => {
-    return this.props.fetch({ epic, type: 'dependent' });
+  unselectEdge = () => {
+    this.setState({
+      selectedEdge: null
+    });
+  }
+
+  deleteSelectedEdge = () => {
+    const { selectedEdge } = this.state;
+    this.unselectEdge();
+    return this.props.deleteLink(selectedEdge);
+  }
+
+  createLink = (source, target) => {
+    return this.props.createLink({
+      source, target
+    });
   }
 }
 

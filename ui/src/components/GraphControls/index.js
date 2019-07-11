@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Flex, FlexItem } from '@instructure/ui-layout'
-import TextInput from '@instructure/ui-forms/lib/components/TextInput'
-import Button from '@instructure/ui-buttons/lib/components/Button'
+import TextInput from '@instructure/ui-forms/lib/TextInput'
+import Button from '@instructure/ui-buttons/lib/Button'
 import PropTypes from 'prop-types';
-import { colors } from '../shared/constants';
+import { colors } from 'shared/constants';
 
 class GraphControls extends Component {
   static propTypes = {

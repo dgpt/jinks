@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Tray from '@instructure/ui-overlays/lib/components/Tray'
+import Tray from '@instructure/ui-overlays/lib/Tray'
 import { CloseButton } from '@instructure/ui-buttons';
-import IssueForm from './IssueForm';
+import IssueForm from 'components/IssueForm';
 import PropTypes from 'prop-types';
 
 class IssueTray extends Component {
@@ -20,6 +20,7 @@ class IssueTray extends Component {
         open={isOpen}
         onDismiss={close}
         placement="end"
+        size="regular"
       >
         <CloseButton
           placement="end"

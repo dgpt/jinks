@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'gatsby-link';
-import { colors } from '../shared/constants';
+import { colors } from 'shared/constants';
 
 const Header = ({ siteTitle }) => (
   <div

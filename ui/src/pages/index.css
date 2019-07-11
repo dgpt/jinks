@@ -1,0 +1,25 @@
+main {
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  height: 100%;
+}
+
+.controls {
+  min-width: 25rem;
+  max-width: 54rem;
+  width: 100%;
+  align-self: center;
+}
+
+.graph {
+  height: 100%;
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.actions {
+  position: fixed;
+  bottom: 1rem;
+  right: 47%;
+}
