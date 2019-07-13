@@ -5,24 +5,25 @@ class IssuesController < ApplicationController
   # Limited to 300 issues at a time
   #
   # Query Parameters
-  #   type - String; "dependent", "caused"
+  #   type - String; "dependent", "caused", "relates"
   #   epic - String; Jira Key
   def index
     set_epic(params[:epic])
-    issue_service.load
-    @issues = current_query.issues
-    @rels = current_query.linked_rels(type)
+    query = issue_service.load
+    @issues = query.issues
+    @rels = query.links(type)
 
     render :index, formats: :json
   end
 
-  # PUT /issues
+  # PUT /issues/:id
   #
   # Updates issues from Jira
   # Limited to 300 issues at a time
   #
   # Request Parameters
   def update
+    Issue.find_by(jira_id: params[:id])
   end
 
   # POST /issues
@@ -39,10 +40,6 @@ class IssuesController < ApplicationController
   private
   def issue_service
     @issue_service ||= IssueService.new(force_update: params[:force])
-  end
-
-  def current_query
-    @current_query ||= Query.find_by(jql: issue_service.jql)
   end
 
   def issue_params

@@ -42,7 +42,9 @@ export default function issueFetchable(Component) {
       });
     }
 
-    createLink = ({ source, target, type }) => {
+    createLinks = ({ source, target, type }) => {
+      const { setData, data } = this.props;
+
       if (!(source && target)) return;
       type = type || 'dependent';
 

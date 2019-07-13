@@ -5,7 +5,7 @@ class Query
 
   has_many :out, :issues, type: :QUERIED, model_class: :Issue
 
-  def linked_rels(type)
+  def links(type)
     query_as(:q)
       .match("(i:Issue)-[r:#{type}]-(other:Issue)")
       .where("exists((q:Query)-[:QUERIED]->(other:Issue))")

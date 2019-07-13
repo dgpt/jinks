@@ -56,10 +56,13 @@ class IssueService
   end
 
   def load
+    return nil if @jql.empty?
+
     cache_key = "jql:#{jql}"
     Rails.logger.debug("Attempting to load jql: #{jql}")
-    return unless @force_update || Rails.cache.read(cache_key).nil?
-    return if @jql.empty?
+    query = Query.find_or_initialize_by(jql: jql)
+
+    #return query unless @force_update || Rails.cache.read(cache_key).present?
     Rails.logger.debug("Loading jql: #{jql}")
 
     issues = @client.Issue.jql(
@@ -68,10 +71,7 @@ class IssueService
       max_results: 300
     )
 
-    Rails.cache.write(cache_key, true, expires_in: 5.minutes)
-
-    Rails.logger.debug("Creating query")
-    query = Query.find_or_initialize_by(jql: jql)
+    #Rails.cache.write(cache_key, true, expires_in: 5.minutes)
 
     query.issues = issues.map do |issue|
       Issue.update_or_create_from_json!(issue.attrs).tap do |i|
@@ -82,5 +82,6 @@ class IssueService
     end
 
     query.save!
+    query
   end
 end

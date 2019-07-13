@@ -1,5 +1,5 @@
 json.nodes @issues do |node|
-  json.id "n#{node.neo_id}"
+  json.id node.id
   json.label node.key
   json.summary node.summary
   json.description node.description
@@ -9,7 +9,7 @@ json.nodes @issues do |node|
 end
 
 json.edges @rels do |edge|
-  json.source "n#{edge.end_node_id}"
-  json.target "n#{edge.start_node_id}"
-  json.id "e#{edge.id}"
+  json.source edge.from_node.id
+  json.target edge.to_node.id
+  json.id edge.jira_id
 end

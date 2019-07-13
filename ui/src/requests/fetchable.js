@@ -5,6 +5,9 @@ const DEFAULT_OPTIONS = {
   props: [],
   path: '',
   method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  },
   parse: data => data,
   setData: false
 };
@@ -60,20 +63,22 @@ export default function fetchable(Component, globalOptions) {
 
       options = { ...globalOptions, ...options };
       const {
-        method, body, path,
+        method, body, path, headers,
         query, setData, parse
       } = options;
 
       const url = buildURL(path, query);
-      return fetch(url, { method, body: JSON.stringify(body) })
+      return fetch(url, { method, headers, body: JSON.stringify(body) })
         .then(res => res.json())
         .then(
           data => {
             let state = { isLoading: false };
-            if (setData && parse) {
-              state.data = parse(data);
+            data = parse ? parse(data) : data;
+            if (setData) {
+              state.data = data;
             }
-            return this.setState(state);
+            this.setState(state);
+            return data;
           },
           error => this.setState({ isLoading: false, error })
         );

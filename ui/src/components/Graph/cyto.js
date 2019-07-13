@@ -91,7 +91,7 @@ const graphStyle = [
   {
     selector: 'edge:selected',
     style: {
-      width: 4,
+      width: 3,
       'line-color': colors.primary,
       'target-arrow-color': colors.primary,
       'target-arrow-shape': 'triangle',
