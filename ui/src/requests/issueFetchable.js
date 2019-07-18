@@ -42,21 +42,23 @@ export default function issueFetchable(Component) {
       });
     }
 
-    createLinks = ({ source, target, type }) => {
+    createLink = ({ from, to, type }) => {
       const { setData, data } = this.props;
 
-      if (!(source && target)) return;
+      if (!(from && to)) return;
       type = type || 'dependent';
 
       return this.props.fetch({
         path: '/links',
         method: 'POST',
         body: {
-          source: source.label,
-          target: target.label,
+          from: from.label,
+          to: to.label,
           type
-        }
-      });
+        },
+      }).then(newEdges => this.props.setData(
+        [ ...data, ...newEdges ]
+      ));
     }
 
     deleteLink = ({ id, type }) => {

@@ -87,9 +87,9 @@ class IndexPage extends React.Component {
     return this.props.deleteLink(selectedEdge);
   }
 
-  createLink = (source, target) => {
+  createLink = (from, to) => {
     return this.props.createLink({
-      source, target
+      from, to
     });
   }
 }

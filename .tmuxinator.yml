@@ -1,0 +1,14 @@
+name: jinks
+
+on_project_first_start:
+  - rake neo4j:start
+
+windows:
+  - jinks:
+      layout: even-horizontal
+      panes:
+        - server:
+          - rails s
+        - frontend:
+          - cd ui
+          - gatsby develop

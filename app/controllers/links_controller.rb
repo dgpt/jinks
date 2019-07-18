@@ -11,11 +11,9 @@ class LinksController < ApplicationController
   #
   #   (source)-[type]->target
   def create
-    @links = create_params[:links].map do |link_param|
-      from = Issue.find_by!(key: link_param[:from])
-      to = Issue.find_by!(key: link_param[:to])
-      link_service.create_link!(from: from, to: to)
-    end
+    from = Issue.find_by!(key: params[:from])
+    to = Issue.find_by!(key: params[:to])
+    link_service.create_link!(from: from, to: to)
   end
 
   # DELETE /links/:id
@@ -30,11 +28,13 @@ class LinksController < ApplicationController
   end
 
   private
+
   def link_service
     @link_service ||= LinkService.new(params[:type])
   end
 
-  def create_params
-    params.require(links: [ :from, :to ])
-  end
+  # TODO: support array of links for params
+  #def create_params
+  #  params.require(links: [ :from, :to ])
+  #end
 end
