@@ -18,7 +18,7 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'rack-cors', '~> 1.0.2'
+gem 'rack-cors', '~> 1.0.5'
 
 gem 'oauth',        '~> 0.5.4'
 gem 'pry',          '~> 0.12.2'
