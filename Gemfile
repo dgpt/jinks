@@ -20,7 +20,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'rack-cors', '~> 1.0.2'
 
-gem 'oauth',        '~> 0.5.4'
+gem 'oauth',        '~> 0.5.5'
 gem 'pry',          '~> 0.12.2'
 gem 'pry-rails',    '~> 0.3.6'
 gem 'jira-ruby',    '~> 1.7.0'
