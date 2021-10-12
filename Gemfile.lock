@@ -94,7 +94,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.9.2)
-    mimemagic (0.3.3)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -123,7 +125,7 @@ GEM
       ruby-progressbar
       rubyzip (>= 1.1.7)
     net_tcp_client (2.2.0)
-    nio4r (2.4.0)
+    nio4r (2.5.8)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
     oauth (0.5.4)
@@ -134,7 +136,7 @@ GEM
       method_source (~> 0.9.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    puma (4.0.1)
+    puma (4.3.9)
       nio4r (~> 2.0)
     rack (2.0.7)
     rack-cors (1.0.3)
@@ -212,7 +214,7 @@ DEPENDENCIES
   oauth (~> 0.5.4)
   pry (~> 0.12.2)
   pry-rails (~> 0.3.6)
-  puma (~> 4.0)
+  puma (~> 4.3)
   rack-cors (~> 1.0.2)
   rails (~> 5.2.3)
   spring
